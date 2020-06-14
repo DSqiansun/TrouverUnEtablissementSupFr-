@@ -18,7 +18,17 @@ data_etablisments[, 21]  <- as.numeric(data_etablisments[, 21])
 data_etablisments[, 22]  <- as.numeric(data_etablisments[, 22])
 data_etablisments$statut <- as.factor(data_etablisments$statut)
 data_etablisments$`type.d.établissement` <- as.factor(data_etablisments$`type.d.établissement`)
-data_etablisments
+
+
+# etablisment secondaire
+etablisments_s_path = 'data/Etablissements d\'enseignement secondaire.csv'
+data_etablisments_s  <-  read.csv2(etablisments_s_path, encoding = 'UTF-8', stringsAsFactors =F)
+
+# metier
+
+metier_path = 'data/Métiers.csv'
+data_metier  <-  read.csv2(metier_path, encoding = 'UTF-8', stringsAsFactors =F)
+
 ```
 
 Visualisation
@@ -71,13 +81,11 @@ leaflet(data = data_etablisments) %>% addTiles() %>%
 ```
 
 
-Data
+高校数据
 ===================================== 
 
-Column {.tabset}
--------------------------------------
 
-### Data by Country
+
 ```{r}
 
 DT::datatable(data_etablisments,
@@ -92,3 +100,40 @@ DT::datatable(data_etablisments,
 
 ```
 
+
+
+大学之前院校
+===================================== 
+
+
+
+```{r}
+
+DT::datatable(data_etablisments_s,
+              rownames = FALSE,
+              filter = 'top',
+              extensions = 'Buttons',
+              options = list(
+              dom = 'Bfrtip',
+              buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+              pageLength = 13
+  ))
+
+```
+
+职业分类
+===================================== 
+
+```{r}
+
+DT::datatable(data_metier,
+              rownames = FALSE,
+              filter = 'top',
+              extensions = 'Buttons',
+              options = list(
+              dom = 'Bfrtip',
+              buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+              pageLength = 13
+  ))
+
+```
