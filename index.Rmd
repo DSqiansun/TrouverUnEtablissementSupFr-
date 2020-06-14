@@ -102,24 +102,8 @@ DT::datatable(data_etablisments,
 
 
 
-大学之前院校
-===================================== 
 
 
-
-```{r}
-
-DT::datatable(data_etablisments_s,
-              rownames = FALSE,
-              filter = 'top',
-              extensions = 'Buttons',
-              options = list(
-              dom = 'Bfrtip',
-              buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
-              pageLength = 13
-  ))
-
-```
 
 职业分类
 ===================================== 
