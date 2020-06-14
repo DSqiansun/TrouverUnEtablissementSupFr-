@@ -1,0 +1,94 @@
+---
+title: "法国高校分布"
+date: "`r paste0('update:', format(Sys.time(), '%d %B, %Y'))`"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    theme: yeti
+    #navbar:
+    #  - { title: "Blog", href: "https://dsqiansun.github.io/blog/", align: right }
+---
+
+```{r setup, include=FALSE}
+pacman::p_load(knitr,flexdashboard, readr, fs, tidyverse, leaflet, plotly, DT, htmltools, forecast, data.table)
+
+etablisments_path = 'data/Etablissements d\'enseignement supérieur.csv'
+data_etablisments  <-  read.csv2(etablisments_path, encoding = 'UTF-8', stringsAsFactors =F)
+data_etablisments[, 21]  <- as.numeric(data_etablisments[, 21])
+data_etablisments[, 22]  <- as.numeric(data_etablisments[, 22])
+data_etablisments$statut <- as.factor(data_etablisments$statut)
+data_etablisments$`type.d.établissement` <- as.factor(data_etablisments$`type.d.établissement`)
+data_etablisments
+```
+
+Visualisation
+=======================================================================
+
+Row
+-----------------------------------------------------------------------
+
+### 学校总数 {.value-box}
+
+```{r}
+valueBox(format(nrow(data_etablisments), big.mark=","))
+
+```
+
+### 商校数量 {.value-box}
+
+```{r}
+
+valueBox(format(sum(data_etablisments$type.d.établissement=='Ecole de gestion et de commerce'), big.mark=","))
+
+
+```
+
+### 其他院校 {.value-box}
+
+```{r}
+valueBox(format(sum(data_etablisments$type.d.établissement=='Autre établissement du supérieur'), big.mark=","))
+
+```
+
+### 艺校 {.value-box}
+
+```{r}
+valueBox(format(sum(data_etablisments$type.d.établissement=='Ecole d\'art'), big.mark=","))
+```
+
+
+
+
+
+Row
+-----------------------------------------------------------------------
+
+### Global visualisation {data-width=600}
+
+```{r}
+leaflet(data = data_etablisments) %>% addTiles() %>%
+  addMarkers(~`longitude..X.`, ~`latitude..Y.`, popup = ~as.character(nom), label = ~as.character(nom))
+```
+
+
+Data
+===================================== 
+
+Column {.tabset}
+-------------------------------------
+
+### Data by Country
+```{r}
+
+DT::datatable(data_etablisments,
+              rownames = FALSE,
+              filter = 'top',
+              extensions = 'Buttons',
+              options = list(
+              dom = 'Bfrtip',
+              buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+              pageLength = 13
+  ))
+
+```
+
